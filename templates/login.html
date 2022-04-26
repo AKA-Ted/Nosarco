@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css">
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/estilos.css')}}">
 </head>
 <body>
 
@@ -17,8 +17,8 @@
 
             <div class="form-group">
                 
-                <input type="text" class="form-control" name="correo" id="correo" autocomplete="off">
-                <label for="correo">Correo electrónico</label>
+                <input type="text" class="form-control" name="num_empleado" id="correo" autocomplete="off">
+                <label for="num_empleado">Número de empleado</label>
 
             </div>
 
@@ -30,16 +30,22 @@
 
             </div>
 
-            <button class="btn btn-color" type="button">Inicia sesión</button>
+            {%with messages = get_flashed_messages()%}
+                {%if messages%}
+                <div class="alert alert-warning" role="alert">
+                    <strong class="text-center">{{messages[0]}}</strong>
+                </div>    
+                    
+                {%endif%}
+            {%endwith%}
 
-            <div class="btn-link">
-                <a href="registrarcuenta.html" class="link">¿Aún no tienes cuenta?, Regístrate</a>
-            </div>
+            <button class="btn btn-color" type="submit">Inicia sesión</button>
+
 
         </form>
 
     </div>
 
-    <script src="app.js"></script>
+    <script src="{{url_for('static', filename='js/app.js')}}"></script>
 </body>
 </html>

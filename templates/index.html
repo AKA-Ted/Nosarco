@@ -8,8 +8,9 @@
 
     <!-- FUENTE GOOGLE FONTS : Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 <body>
     
@@ -23,10 +24,10 @@
 
             <div class="ds-perfil">
                 <div class="foto">
-                    <img src="perfil.jpg" alt="">
+                    <img src="{{url_for('static', filename='img/perfil.jpg')}}">
                 </div>
                 <div class="info-perfil">
-                    <span>Administrador</span>
+                    <span>Cajero</span>
                     <h3>Moises Flores Ventura</h3>
                 </div>
             </div>
@@ -35,10 +36,9 @@
                 
                 <ul>
                     <li><a href="#"><i class="fa-solid fa-home"></i><span>Home</span></a></li>
-                    <li><a href="#"><i class="fa-duotone fa-calendar"><span>Horario</span></i>
-                    <li><a href="#"><i class="fa-solid fa-truck-fast"></i><span>Empleados</span></a></li>
-                    <li><a href="#"><i class="fa-solid fa-basket-shopping"></i><span>Ordenes</span></a></li>
-                    <li><a href="#"><i class="fa-solid fa-clipboard-list"></i><span>Reportes</span></a></li>
+                    <li><a href="{{url_for('Ventas')}}"><i class="fa-solid fa-money-bill-trend-up"></i><span>Ventas</span></a></li>
+                    <li><a href="{{url_for('Reportes')}}"><i class="fa-solid fa-clipboard-list"></i><span>Reportes</span></a></li>
+                    <li><a href="#"><i class="fa-solid fa-people-group"></i><span>Colaboradores</span></a></li>
                     <li><a href="#"><i class="fa-solid fa-sliders"></i><span>Ajustes</span></a></li>
 
                 </ul>
@@ -46,9 +46,11 @@
             </div>
 
             <div class="sign-off">
-                <a href="#" class="btn-sign-off">
+                <!-- <form id="cerrar_sesion" method="POST" action="{{url_for('Logout')}}">
+                </form> -->
+                <a href="{{url_for('Logout')}}" class="btn-sign-off">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                    <span><a href="indexformulario.html">Cerrar Sesión</a></span>
+                    <span>Cerrar Sesión</span>
                 </a>
             </div>
            
@@ -63,12 +65,10 @@
                 </div>
                 <h2>Empleados</h2>
             </div>
-
             <div class="ds-panel-content">
 
-                <p>Aquí el contenido</p
-
-
+                {% block content %} {% endblock %}
+            
             </div>
 
         </div>
@@ -77,6 +77,7 @@
 
      <!-- ICONS: Font Awesome -->
     <script src="https://kit.fontawesome.com/075922b03a.js" crossorigin="anonymous"></script>
-    <script src="app.js"></script>
+    <script src="{{url_for('static', filename='js/app.js')}}"></script>
+
 </body>
 </html>
