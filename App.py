@@ -85,6 +85,13 @@ def Reportes():
 
     return render_template('reportes.html')
 
+@app.route('/colaboradores' , methods = ['POST', 'GET'])
+def Colaboradores():
+    if 'num_empleado' not in session:
+        return redirect(url_for('Login'))
+
+    return render_template('colaboradores.html')
+
 #MODO DEBUG ACTIVADO
 if __name__ == "__main__":
     app.run(debug = True)
