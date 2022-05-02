@@ -1,6 +1,6 @@
+from multiprocessing import connection
 from typing import final
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-from flaskext.mysql import MySQL
 import pymysql
 import os
 
@@ -12,12 +12,12 @@ app.config.from_object(__name__)
 app.secret_key = "flash message"
 
 #MySQL
-con = pymysql.connect(host='bv2rebwf6zzsv341.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-        user='rzh1cxyhp1eiwu5g',
-        password='dlz55fjlmcun57qn',
-        db='raia64mmpqm1hqos')
-mysql = MySQL()
-mysql.init_app(app)
+def getConnection():
+    connection = pymysql.connect(host='bv2rebwf6zzsv341.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+            user='rzh1cxyhp1eiwu5g',
+            password='dlz55fjlmcun57qn',
+            db='raia64mmpqm1hqos')
+    return connection
 
 #ENRUTAMIENTO
 @app.route('/', methods = ['POST', 'GET'])
@@ -29,23 +29,24 @@ def Login():
             return render_template('login.html')
 
     elif request.method == "POST":
+        num_empleado = request.form['num_empleado']
+        password = request.form['password']
+
+        connection = getConnection()
+        cursor = connection.cursor() 
+        cursor.execute(F"CALL sp_login(\"{num_empleado}\",\"{password}\")") 
+        data = cursor.fetchall()
+        connection.close()
+
         try:
-            num_empleado = request.form['num_empleado']
-            password = request.form['password']
-
-            with con.cursor() as cursor:
-                cursor.execute(F"CALL sp_login(\"{num_empleado}\",\"{password}\")") 
-                data = cursor.fetchall()
-                con.commit()
-                con.close()
-
-                if data[0][0] != 'NO INICIAR' :
-                    session['num_empleado'] = data[0][0]
-                    session['is_admin'] = True if (data[0][1] == 0) else False
-                    return redirect(url_for('Index'))
-                else:
-                    flash("Datos incorrectos")
-                    return redirect(url_for('Login'))
+            if (data[0][0]) != 0 :
+                session['num_empleado'] = data[0][0]
+                session['is_admin'] = True if (data[0][1] == 0) else False
+                session['nom_empleado'] = data[0][2]
+                return redirect(url_for('Index'))
+            else:
+                flash('Credenciales incorrectas')
+                return redirect(url_for('Login'))
         except:
             flash('Error')
             return redirect(url_for('Login')) 
@@ -55,7 +56,7 @@ def Login():
 def Logout():
     if request.method == "GET":
         session.pop('num_empleado', None)
-        session.pop('id_usuario', None)
+        session.pop('is_admin', None)
         return redirect(url_for('Login'))
 
 @app.route('/index', methods = ['POST', 'GET'])
@@ -70,21 +71,21 @@ def Ventas():
     if 'num_empleado' not in session:
         return redirect(url_for('Login'))
 
-    return render_template('ventas.html')
+    return render_template('ventas.html', user = session)
 
 @app.route('/reportes' , methods = ['POST', 'GET'])
 def Reportes():
     if 'num_empleado' not in session:
         return redirect(url_for('Login'))
 
-    return render_template('reportes.html')
+    return render_template('reportes.html', user = session)
 
 @app.route('/colaboradores' , methods = ['POST', 'GET'])
 def Colaboradores():
     if 'num_empleado' not in session:
         return redirect(url_for('Login'))
 
-    return render_template('colaboradores.html')
+    return render_template('colaboradores.html', user = session)
 
 #MODO DEBUG ACTIVADO
 if __name__ == "__main__":

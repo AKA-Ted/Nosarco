@@ -19,25 +19,21 @@
     <div class="admin-dashboard">
 
         <div class="ds-left-menu ">
-
+            
             <button class="btn-menu">
                 <i class="fa-solid fa-circle-chevron-left"></i>
             </button>
-
+            
             <div class="ds-perfil">
-                <div class="foto">
-                    <img src="{{url_for('static', filename='img/perfil.jpg')}}">
-                </div>
                 <div class="info-perfil">
-                    <span>Cajero</span>
-                    <h3>Moises Flores Ventura</h3>
+                    <h3>{{user['nom_empleado']}} </h3>
                 </div>
             </div>
 
             <div class="ds-menu">
                 
                 <ul>
-                    <li><a href="#"><i class="fa-solid fa-home"></i><span>Home</span></a></li>
+                    <li><a href="{{url_for('Index')}}"><i class="fa-solid fa-home"></i><span>Home</span></a></li>
                     <li><a href="{{url_for('Ventas')}}"><i class="fa-solid fa-money-bill-trend-up"></i><span>Ventas</span></a></li>
                     <li><a href="{{url_for('Reportes')}}"><i class="fa-solid fa-clipboard-list"></i><span>Reportes</span></a></li>
                     <li><a href="{{url_for('Colaboradores')}}"><i class="fa-solid fa-people-group"></i><span>Colaboradores</span></a></li>
@@ -48,8 +44,6 @@
             </div>
 
             <div class="sign-off">
-                <!-- <form id="cerrar_sesion" method="POST" action="{{url_for('Logout')}}">
-                </form> -->
                 <a href="{{url_for('Logout')}}" class="btn-sign-off">
                     <i class="fa-solid fa-arrow-right-to-bracket"></i>
                     <span>Cerrar Sesión</span>
@@ -63,13 +57,16 @@
            
             <div class="panel-header">
                 <div class="icono">
-                    <i class="fa-solid fa-bag-shopping"></i>
+                    <i class="fa-solid fa-user"></i>
                 </div>
-                <h2>Empleados</h2>
+                <h2>{{'Gerente' if user['is_admin'] else 'Colaborador'}}</h2>
             </div>
             <div class="ds-panel-content">
 
-                {% block content %} {% endblock %}
+                {% block content %} 
+                    <h1>Bienvenido</h1>
+                    Por favor escoge una de las opciones de la izquierda.
+                {% endblock %}
             
             </div>
 

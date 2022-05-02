@@ -90,18 +90,24 @@ drop procedure if exists sp_login;
 delimiter **
 create procedure sp_login(xnumEmp varchar(50), xpsw varchar(50))
 begin
-declare msj varchar(50);
+declare xnum_empleado int;
+declare xtype_user int;
+declare xnombre varchar(50);
 declare existencia int;
     set existencia = (select count(*) from EMPLEADO where num_empleado = xnumEmp and psw = xpsw);
     if( existencia = 0 )then
-        set msj = "NO INICIAR";
+        set xnum_empleado = 0;
+        set xtype_user = 0;
+        set xnombre = 'Error';
 	else	
-		set msj = (select num_empleado from EMPLEADO where  num_empleado = xnumEmp and psw = xpsw);
+		set xnum_empleado = (select num_empleado from EMPLEADO where  num_empleado = xnumEmp and psw = xpsw);
+		set xtype_user = (select type_user from EMPLEADO where num_empleado = xnumEmp and psw = xpsw);
+        set xnombre = (SELECT CONCAT(nombre, ' ', apellido_paterno, ' ', apellido_materno) from EMPLEADO where num_empleado = xnumEmp and psw = xpsw);
     end if;
-select msj as num_empleado, CAST(type_user AS UNSIGNED) AS type_user from EMPLEADO where num_empleado = xnumEmp and psw = xpsw;
+select xnum_empleado as num_empleado, xtype_user as type_user, xnombre as nom_empleado;
 end; **
 delimiter ;
--- CALL sp_login(1, 'root');
+CALL sp_login(1, 'root');
 /*		FIN PROCEDURE DE USUARIOS		*/
 
 /*		PROCEDURE DE ENTRADA		*/
