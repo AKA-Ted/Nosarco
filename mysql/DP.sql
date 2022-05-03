@@ -23,6 +23,7 @@ CREATE TABLE HORARIO(
 
 DROP TABLE IF EXISTS VENTA_CAJAS;
 CREATE TABLE VENTA_CAJAS(
+	folio int primary key,
 	caja int,
     num_empleado int,
     venta decimal(10,2),
@@ -57,7 +58,6 @@ select msj as Resultado;
 end; **
 delimiter ;
 -- CALL sp_addUser(2, 'Fulanito', 'Fulanito', 'Fulanito', 'root', 1);
-select * from EMPLEADO;
 
 drop procedure if exists sp_deleteUser;
 delimiter **
@@ -123,20 +123,48 @@ select msj as Resultado;
 end; **
 delimiter ;
 -- CALL sp_checkIn(1);
+
+
 /*		PROCEDURE DE VENTAS		*/
-drop procedure if exists sp_ventas;
+drop procedure if exists sp_registrar_venta;
 delimiter **
-create procedure sp_ventas(xnumEmp int, xcaja int, xventa decimal(10,2), xturno varchar(10), xfecha date)
+create procedure sp_registrar_venta(xnumEmp int, xcaja int, xventa decimal(10,2), xturno varchar(10), xfecha date)
 begin 
-	insert into VENTA_CAJAS(num_empleado, caja, venta, turno, fecha)
-    values(xnumEmp, xcaja, xventa, xturno, xfecha);
+declare folio int;
+	set folio = ((select count(*) from VENTA_CAJAS)+1);
+	insert into VENTA_CAJAS(folio, num_empleado, caja, venta, turno, fecha)
+    values(folio, xnumEmp, xcaja, xventa, xturno, xfecha);
 end; **
 delimiter ;
-CALL sp_ventas(12345, 1, 10500.50, 'Matutino', '2022-05-02');
+CALL sp_registrar_venta(12345, 1, 10500.50, 'Matutino', '2022-05-02');
+
+drop procedure if exists sp_editar_venta;
+delimiter **
+create procedure sp_editar_venta(xnumEmp int, xcaja int, xventa decimal(10,2), xturno varchar(10), xfecha date, xfolio int)
+begin 
+	UPDATE VENTA_CAJAS set caja = xcaja, num_empleado = xnumEmp, venta = xventa, turno = xturno, fecha = xfecha where folio = xfolio;
+end; **
+delimiter ;
+CALL sp_editar_venta(12345, 1, 10500.50, 'Matutino', '2022-05-02', 1);
+
+drop procedure if exists sp_borrar_venta;
+delimiter **
+create procedure sp_borrar_venta(xfolio int )
+begin 
+declare msj varchar(50);
+declare existencia int;
+	set existencia = (select count(*) from VENTA_CAJAS where folio = xfolio);
+	if(existencia = 0)then 
+		set msj = "ERROR";
+	end if;
+    delete from VENTA_CAJAS where folio = xfolio;
+end; **
+delimiter ;
+CALL sp_borrar_venta(2);
 
 DROP VIEW IF EXISTS VENTAS;
 CREATE VIEW VENTAS AS
-    SELECT caja, concat(EMPLEADO.nombre, ' ', EMPLEADO.apellido_paterno, ' ', EMPLEADO.apellido_materno) as nombre, venta, turno, fecha, EMPLEADO.num_empleado
+    SELECT caja, concat(EMPLEADO.nombre, ' ', EMPLEADO.apellido_paterno, ' ', EMPLEADO.apellido_materno) as nombre, venta, turno, fecha, EMPLEADO.num_empleado, folio
     FROM VENTA_CAJAS
 	INNER JOIN EMPLEADO ON VENTA_CAJAS.num_empleado = EMPLEADO.num_empleado;
     

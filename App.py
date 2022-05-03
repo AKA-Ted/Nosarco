@@ -211,6 +211,58 @@ def editar():
 
         return redirect(url_for('Ajustes'))
 
+
+@app.route('/agregarVenta' , methods = ['POST', 'GET'])
+def agregarVenta():
+    if request.method == "POST":
+        caja = request.form['caja']
+        num_empleado = request.form['num_empleado']
+        venta = request.form['venta']
+        turno = request.form['turno']
+        fecha = request.form['fecha']
+        
+        connection = getConnection()
+        cursor = connection.cursor() 
+        cursor.execute(F"CALL sp_registrar_venta(\"{num_empleado}\", \"{caja}\", \"{venta}\", \"{turno}\", \"{fecha}\");") 
+        connection.commit()
+        connection.close()
+
+        return redirect(url_for('Ventas'))
+
+
+@app.route('/editarVenta' , methods = ['POST', 'GET'])
+def editarVenta():
+    if request.method == "POST":
+        caja = request.form['caja']
+        num_empleado = request.form['num_empleado']
+        venta = request.form['venta']
+        turno = request.form['turno']
+        fecha = request.form['fecha']
+        folio = request.form['folio']
+
+        connection = getConnection()
+        cursor = connection.cursor() 
+        cursor.execute(F"CALL sp_editar_venta(\"{num_empleado}\", \"{caja}\", \"{venta}\", \"{turno}\", \"{fecha}\", \"{folio}\");") 
+        connection.commit()
+        connection.close()
+
+        return redirect(url_for('Ventas'))
+
+
+@app.route('/eliminarVenta' , methods = ['POST', 'GET'])
+def eliminarVenta():
+    if request.method == "POST":
+        folio = request.form['folio']
+
+        connection = getConnection()
+        cursor = connection.cursor() 
+        cursor.execute(F"CALL sp_borrar_venta(\"{folio}\");") 
+        connection.commit()
+        connection.close()
+
+        return redirect(url_for('Ventas'))
+
+
 #MODO DEBUG ACTIVADO
 if __name__ == "__main__":
     app.run(debug = True)

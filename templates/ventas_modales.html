@@ -8,12 +8,63 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        
+        <form method="POST" action="{{url_for('agregarVenta')}}">
+            <div class="modal-body">
+                <!-- Caja -->
+                <div class="mb-3 row">
+                    <label  class="col-sm-2 col-form-label">Caja</label>
+                    <div class="col-sm-10">
+                    <select class="form-control" class="form-control form-control-lg" id="caja" name="caja">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                    </div>
+                </div>
+                <!-- Número de empleado -->
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Número de empleado</label>
+                    <div class="col-sm-10">
+                    <input type="number" class="form-control" id="num_empleado" name="num_empleado">
+                    </div>
+                </div>
+                <!-- Venta-->
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Venta</label>
+                    <div class="col-sm-10">
+                    <input type="number" class="form-control" id="venta" name="venta">
+                    </div>
+                </div>
+                <!-- Turno -->
+                <div class="mb-3 row">
+                    <label  class="col-sm-2 col-form-label">Turno</label>
+                    <div class="col-sm-10">
+                    <select class="form-control" class="form-control form-control-lg" id="turno" name="turno">
+                        <option value="Matutino">Matutino</option>
+                        <option value="Vespertino">Vespertino</option>
+                    </select>
+                    </div>
+                </div>
+                <!-- Fecha -->
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Fecha</label>
+                    <div class="col-sm-10">
+                    <input type="date" class="form-control" id="fecha" name="fecha">
+                    </div>
+                </div>
+            </div>
           <div class="modal-footer">
               <button type="submit" class="btn btn-outline-danger">Aceptar</button>
               <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancelar</button>
           </div>
-      </form>
+        </form>
       </div>
     </div>
 </div>
@@ -21,7 +72,7 @@
 
 <!-- Modal Editar -->
 {% for v in ventas %}
-<div class="modal fade bd-example-modal-lg" id="editarVenta{{v.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="editarVenta{{v.6}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -31,9 +82,58 @@
         </button>
         </div>
         
-        <form method="POST" action="{{url_for('editarColaborador')}}">
+        <form method="POST" action="{{url_for('editarVenta')}}">
         <div class="modal-body">
-            
+            <!-- Caja -->
+            <div class="mb-3 row">
+                <label  class="col-sm-2 col-form-label">Caja</label>
+                <div class="col-sm-10">
+                <select class="form-control" class="form-control form-control-lg" id="caja" name="caja">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+                </div>
+            </div>
+            <!-- Número de empleado -->
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">Número de empleado</label>
+                <div class="col-sm-10">
+                <input type="number" class="form-control" id="num_empleado" name="num_empleado" value="{{v.5}}">
+                </div>
+            </div>
+            <!-- Venta-->
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">Venta</label>
+                <div class="col-sm-10">
+                <input type="number" class="form-control" id="venta" name="venta" value="{{v.2}}">
+                </div>
+            </div>
+            <!-- Turno -->
+            <div class="mb-3 row">
+                <label  class="col-sm-2 col-form-label">Turno</label>
+                <div class="col-sm-10">
+                <select class="form-control" class="form-control form-control-lg" id="turno" name="turno">
+                    <option value="Matutino">Matutino</option>
+                    <option value="Vespertino">Vespertino</option>
+                </select>
+                </div>
+            </div>
+            <!-- Fecha -->
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">Fecha</label>
+                <div class="col-sm-10">
+                <input type="date" class="form-control" id="fecha" name="fecha" value="{{v.4}}">
+                </div>
+            </div>
+            <input type="hidden" id="folio" name="folio" value="{{v.6}}">
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-outline-danger">Aceptar</button>
@@ -47,7 +147,7 @@
 
 <!-- Modal Borrar -->
 {% for v in ventas %}
-<div class="modal fade bd-example-modal-lg" id="borrarVenta{{v.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="borrarVenta{{v.6}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -56,9 +156,10 @@
             <span aria-hidden="true">&times;</span>
         </button>
         </div>
-        <form method="POST" action="{{url_for('eliminarColaborador')}}">
+        <form method="POST" action="{{url_for('eliminarVenta')}}">
         <div class="modal-body">
-            ¿Estás seguro de querer dar de baja esta venta?
+            ¿Estás seguro de querer borrar esta venta?
+            <input type="hidden" id="folio" name="folio" value="{{v.6}}">
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-outline-danger">Aceptar</button>
