@@ -1,11 +1,11 @@
 $(document).ready(function () {
     // Setup - add a text input to each footer cell
-    $('#example thead tr')
+    $('#ventas thead tr')
         .clone(true)
         .addClass('filters')
-        .appendTo('#example thead');
+        .appendTo('#ventas thead');
  
-    var table = $('#example').DataTable({
+    var table = $('#ventas').DataTable({
         orderCellsTop: true,
         fixedHeader: true,
         initComplete: function () {
@@ -60,7 +60,7 @@ $(document).ready(function () {
 
 
 $(document).ready(function() {
-    $('#prueba').DataTable( {
+    $('#reportes').DataTable( {
         dom: 'Bfrtip',
         buttons: [
             {
@@ -81,5 +81,15 @@ $(document).ready(function() {
 } );
 
 $(document).ready(function() {
-    $('#colaboradores').DataTable();
+    $('#colaboradores').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                text: 'Agregar nuevo colaborador',
+                action: function ( e, dt, node, config ) {
+                    $('#agregarColaborador').modal('show')
+                }
+            }
+        ]
+    } );
 } );
