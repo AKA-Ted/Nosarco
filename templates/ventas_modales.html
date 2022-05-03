@@ -1,0 +1,71 @@
+<!-- Modal Agregar -->
+<div class="modal fade bd-example-modal-lg" id="agregarVenta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Registrar nueva venta</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+          <div class="modal-footer">
+              <button type="submit" class="btn btn-outline-danger">Aceptar</button>
+              <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancelar</button>
+          </div>
+      </form>
+      </div>
+    </div>
+</div>
+
+
+<!-- Modal Editar -->
+{% for v in ventas %}
+<div class="modal fade bd-example-modal-lg" id="editarVenta{{v.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar venta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        
+        <form method="POST" action="{{url_for('editarColaborador')}}">
+        <div class="modal-body">
+            
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-danger">Aceptar</button>
+            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancelar</button>
+        </div>
+        </form>
+    </div>
+    </div>
+</div>
+{% endfor %}
+
+<!-- Modal Borrar -->
+{% for v in ventas %}
+<div class="modal fade bd-example-modal-lg" id="borrarVenta{{v.0}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar venta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <form method="POST" action="{{url_for('eliminarColaborador')}}">
+        <div class="modal-body">
+            ¿Estás seguro de querer dar de baja esta venta?
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-outline-danger">Aceptar</button>
+            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancelar</button>
+        </div>
+    </form>
+    </div>
+    </div>
+</div>
+{% endfor %}

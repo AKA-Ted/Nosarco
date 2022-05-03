@@ -34,10 +34,12 @@
                 
                 <ul>
                     <li><a href="{{url_for('Index')}}"><i class="fa-solid fa-home"></i><span>Home</span></a></li>
-                    <li><a href="{{url_for('Ventas')}}"><i class="fa-solid fa-money-bill-trend-up"></i><span>Ventas</span></a></li>
                     {% if (user['is_admin'] == 0 )%}
+                    <li><a href="{{url_for('Ventas')}}"><i class="fa-solid fa-money-bill-trend-up"></i><span>Ventas</span></a></li>
                     <li><a href="{{url_for('Reportes')}}"><i class="fa-solid fa-clipboard-list"></i><span>Reportes</span></a></li>
                     <li><a href="{{url_for('Colaboradores')}}"><i class="fa-solid fa-people-group"></i><span>Colaboradores</span></a></li>
+                    {% else %}
+                    <li><a href="{{url_for('VentasColaboradores')}}"><i class="fa-solid fa-money-bill-trend-up"></i><span>Ventas</span></a></li>
                     {% endif %}
                     <li><a href="{{url_for('Ajustes')}}"><i class="fa-solid fa-sliders"></i><span>Ajustes</span></a></li>
 

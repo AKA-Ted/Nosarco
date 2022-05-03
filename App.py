@@ -81,6 +81,21 @@ def Ventas():
 
     return render_template('ventas.html', user = session, ventas = ventas)
 
+@app.route('/ventasColaboradores' , methods = ['POST', 'GET'])
+def VentasColaboradores():
+    if 'num_empleado' not in session:
+        return redirect(url_for('Login'))
+
+    num_empleado = session['num_empleado']
+
+    connection = getConnection()
+    cursor = connection.cursor() 
+    cursor.execute(F"SELECT * FROM VENTAS WHERE num_empleado = \"{num_empleado}\";") 
+    ventas = cursor.fetchall()
+    connection.close()
+
+    return render_template('ventas.html', user = session, ventas = ventas)
+
 
 @app.route('/reportes' , methods = ['POST', 'GET'])
 def Reportes():

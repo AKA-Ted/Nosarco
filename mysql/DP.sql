@@ -136,7 +136,7 @@ CALL sp_ventas(12345, 1, 10500.50, 'Matutino', '2022-05-02');
 
 DROP VIEW IF EXISTS VENTAS;
 CREATE VIEW VENTAS AS
-    SELECT caja, concat(EMPLEADO.nombre, ' ', EMPLEADO.apellido_paterno, ' ', EMPLEADO.apellido_materno) as Nombre, venta, turno, fecha
+    SELECT caja, concat(EMPLEADO.nombre, ' ', EMPLEADO.apellido_paterno, ' ', EMPLEADO.apellido_materno) as nombre, venta, turno, fecha, EMPLEADO.num_empleado
     FROM VENTA_CAJAS
 	INNER JOIN EMPLEADO ON VENTA_CAJAS.num_empleado = EMPLEADO.num_empleado;
     
