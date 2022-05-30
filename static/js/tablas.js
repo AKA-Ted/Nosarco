@@ -182,13 +182,20 @@ $(document).ready(function () {
 });
 
 
-
+horario[0][colaboradores]
 {
-    horario: {
-        H0:{
-            hora: '07:00-14:30',
-            colaboradores: [N1, N2, N3]
-        }
-    }
+    horario: [
+        {
+            colaboradores: [N1,N2,N3]
+        },
+        {
+            colaboradores: [N2,N3,N4]
+        },
+        {
+            colaboradores: [N2,N3,N4]
+        },
+        {
+            colaboradores: [N2,N3,N4]
+        },
+    ]
 }
-
