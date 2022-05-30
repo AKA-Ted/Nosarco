@@ -79,7 +79,14 @@ def Ventas():
     ventas = cursor.fetchall()
     connection.close()
 
-    return render_template('ventas.html', user = session, ventas = ventas)
+    connection = getConnection()
+    cursor = connection.cursor() 
+    cursor.execute(F"SELECT num_empleado, concat(EMPLEADO.nombre, ' ', EMPLEADO.apellido_paterno, ' ', EMPLEADO.apellido_materno) as nombre from EMPLEADO;") 
+    empleados = cursor.fetchall()
+    connection.close()
+
+    return render_template('ventas.html', user = session, ventas = ventas, empleados = empleados)
+
 
 @app.route('/ventasColaboradores' , methods = ['POST', 'GET'])
 def VentasColaboradores():
@@ -94,7 +101,7 @@ def VentasColaboradores():
     ventas = cursor.fetchall()
     connection.close()
 
-    return render_template('ventas.html', user = session, ventas = ventas)
+    return render_template('ventas_colaboradores.html', user = session, ventas = ventas)
 
 
 @app.route('/reportes' , methods = ['POST', 'GET'])
@@ -262,6 +269,25 @@ def eliminarVenta():
 
         return redirect(url_for('Ventas'))
 
+
+@app.route('/horario' , methods = ['POST', 'GET'])
+def Horario():
+    if 'num_empleado' not in session:
+        return redirect(url_for('Login'))
+
+    connection = getConnection()
+    cursor = connection.cursor() 
+    cursor.execute(F"SELECT num_empleado, concat(EMPLEADO.nombre, ' ', EMPLEADO.apellido_paterno, ' ', EMPLEADO.apellido_materno) as nombre from EMPLEADO;") 
+    empleados = cursor.fetchall()
+    connection.close()
+
+    return render_template('horario.html', user = session, empleados = empleados)
+
+
+@app.route('/agregarHorario' , methods = ['POST', 'GET'])
+def agregarHorario():
+    
+    return redirect(url_for('Horario'))
 
 #MODO DEBUG ACTIVADO
 if __name__ == "__main__":

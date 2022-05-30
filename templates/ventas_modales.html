@@ -32,7 +32,11 @@
                 <div class="mb-3 row">
                     <label class="col-sm-2 col-form-label">Número de empleado</label>
                     <div class="col-sm-10">
-                    <input type="number" class="form-control" id="num_empleado" name="num_empleado">
+                    <select class="form-control" class="form-control form-control-lg" id="num_empleado" name="num_empleado">
+                        {% for e in empleados %}
+                        <option value="{{e.0}}">{{e.1}}</option>
+                        {% endfor %}
+                    </select>
                     </div>
                 </div>
                 <!-- Venta-->

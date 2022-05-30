@@ -68,6 +68,7 @@ $(document).ready(function () {
     });
 });
 
+
 $(document).ready(function () {
     // Setup - add a text input to each footer cell
     $('#ventas_colaboradores thead tr')
@@ -164,3 +165,30 @@ $(document).ready(function() {
         ]
     } );
 } );
+
+
+$(document).ready(function () {
+    $('#horario').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                text: 'Asignar horario a colaborador',
+                action: function ( e, dt, node, config ) {
+                    $('#agregarHorario').modal('show')
+                }
+            }
+        ]
+    } );
+});
+
+
+
+{
+    horario: {
+        H0:{
+            hora: '07:00-14:30',
+            colaboradores: [N1, N2, N3]
+        }
+    }
+}
+
