@@ -180,22 +180,3 @@ $(document).ready(function () {
         ]
     } );
 });
-
-
-horario[0][colaboradores]
-{
-    horario: [
-        {
-            colaboradores: [N1,N2,N3]
-        },
-        {
-            colaboradores: [N2,N3,N4]
-        },
-        {
-            colaboradores: [N2,N3,N4]
-        },
-        {
-            colaboradores: [N2,N3,N4]
-        },
-    ]
-}

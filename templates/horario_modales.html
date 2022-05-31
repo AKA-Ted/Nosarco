@@ -8,7 +8,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form method="POST" action="{{url_for('agregarHorario')}}">
+        <form method="POST" action="{{url_for('agregarHorario')}}" id="addHorario">
             <div class="modal-body">
                 <!-- Día -->
                 <div class="mb-3 row">
@@ -29,7 +29,7 @@
                 <div class="mb-3 row">
                     <label class="col-sm-2 col-form-label">Horario</label>
                     <div class="col-sm-10">
-                    <select class="form-control" class="form-control form-control-lg" id="day" name="day">
+                    <select class="form-control" class="form-control form-control-lg" id="time" name="time">
                         <option value="0">7:00 ~ 14:30</option>
                         <option value="1">8:00 ~ 15:30</option>
                         <option value="2">9:00 ~ 16:30</option>
@@ -48,14 +48,102 @@
                         <option value="{{e.0}}">{{e.1}}</option>
                         {% endfor %}
                     </select>
+                    <input type="hidden" id="name_empleado" name="name_empleado"/>
+                    <input type="hidden" id="id_empleado" name="id_empleado"/>
                     </div>
                 </div>
             </div>
           <div class="modal-footer">
-              <button type="submit" class="btn btn-outline-danger">Aceptar</button>
+              <button type="button" onclick="addHorario()" class="btn btn-outline-danger">Aceptar</button>
               <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancelar</button>
           </div>
         </form>
       </div>
     </div>
 </div>
+
+<!-- Modal Borrar -->
+<div class="modal fade bd-example-modal-lg" id="borrarHorario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Eliminar del horario al Colaborador</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST" action="{{url_for('borrarHorario')}}" id="deleteHorario">
+          <div class="modal-body">
+              <!-- Día -->
+              <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label">Día</label>
+                  <div class="col-sm-10">
+                  <select class="form-control" class="form-control form-control-lg" id="day" name="day">
+                      <option value="0">Lunes</option>
+                      <option value="1">Martes</option>
+                      <option value="2">Miércoles</option>
+                      <option value="3">Jueves</option>
+                      <option value="4">Viernes</option>
+                      <option value="5">Sábado</option>
+                      <option value="6">Domingo</option>
+                  </select>
+                  </div>
+              </div>
+              <!-- Horario -->
+              <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label">Horario</label>
+                  <div class="col-sm-10">
+                  <select class="form-control" class="form-control form-control-lg" id="time" name="time">
+                      <option value="0">7:00 ~ 14:30</option>
+                      <option value="1">8:00 ~ 15:30</option>
+                      <option value="2">9:00 ~ 16:30</option>
+                      <option value="3">12:00 ~ 19:30</option>
+                      <option value="4">14:30 ~ 22:00</option>
+                      <option value="5">15:30 ~ 23:00</option>
+                  </select>
+                  </div>
+              </div>
+              <!-- Colaborador -->
+              <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label">Colaborador</label>
+                  <div class="col-sm-10">
+                  <select class="form-control" class="form-control form-control-lg" id="num_empleado" name="num_empleado">
+                      {% for e in empleados %}
+                      <option value="{{e.0}}">{{e.1}}</option>
+                      {% endfor %}
+                  </select>
+                  </div>
+              </div>
+          </div>
+        <div class="modal-footer">
+            <button type="button" onclick="deleteHorario()" class="btn btn-outline-danger">Aceptar</button>
+            <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function addHorario(){
+    var names = [];
+    var id = [];
+    $("#num_empleado option:selected").each(function () {
+          var $this = $(this);
+          if ($this.length) {
+            names.push($this.text())
+            id.push($this.val())
+        }
+    });
+
+    $("#name_empleado").val(names.join())
+    $("#id_empleado").val(id.join())
+
+    $("#addHorario").submit()
+  }
+
+  function deleteHorario(){
+    $("#deleteHorario").submit()
+  }
+</script>

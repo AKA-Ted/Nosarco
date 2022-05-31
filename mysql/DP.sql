@@ -6,19 +6,11 @@ USE raia64mmpqm1hqos;
 
 DROP TABLE IF EXISTS EMPLEADO;
 CREATE TABLE EMPLEADO(
-	num_empleado int primary key,
     type_user int,
     nombre varchar(50),
     apellido_paterno varchar(50),
     apellido_materno varchar(50),
     psw varchar(50)
-);
-
-DROP TABLE IF EXISTS HORARIO;
-CREATE TABLE HORARIO(
-	num_empleado int,
-    entrada timestamp,
-    FOREIGN KEY (num_empleado) REFERENCES EMPLEADO(num_empleado) 
 );
 
 DROP TABLE IF EXISTS VENTA_CAJAS;
@@ -37,6 +29,12 @@ CREATE TABLE BITACORA_ENTRADA(
 	num_empleado int,
     hora timestamp,
     FOREIGN KEY (num_empleado) REFERENCES EMPLEADO(num_empleado) 
+); 
+
+DROP TABLE IF EXISTS HORARIO;
+CREATE TABLE HORARIO(
+    semana varchar(20) primary key,
+    horario json
 ); 
 
 /*		PROCEDURE DE USUARIOS		*/
@@ -167,5 +165,27 @@ CREATE VIEW VENTAS AS
     SELECT caja, concat(EMPLEADO.nombre, ' ', EMPLEADO.apellido_paterno, ' ', EMPLEADO.apellido_materno) as nombre, venta, turno, fecha, EMPLEADO.num_empleado, folio
     FROM VENTA_CAJAS
 	INNER JOIN EMPLEADO ON VENTA_CAJAS.num_empleado = EMPLEADO.num_empleado;
-    
-SELECT * FROM VENTAS;
+
+SELECT num_empleado, concat(EMPLEADO.nombre, ' ', EMPLEADO.apellido_paterno, ' ', EMPLEADO.apellido_materno) as nombre from EMPLEADO;
+
+DROP PROCEDURE IF EXISTS sp_horario;
+delimiter **
+CREATE PROCEDURE sp_horario(in xsemana varchar(10))
+begin
+declare existencia int;
+	set existencia = (SELECT count(*) FROM HORARIO WHERE semana = xsemana);
+    if (existencia = 0) then
+		INSERT INTO HORARIO VALUES(xsemana, '{"horario":[[[],[],[],[],[],[]],[[],[],[],[],[],[]],[[],[],[],[],[],[]],[[],[],[],[],[],[]],[[],[],[],[],[],[]],[[],[],[],[],[],[]],[[],[],[],[],[],[]]]}');
+	end if;
+end; **
+delimiter ;
+call sp_horario('2022-22');
+
+DROP PROCEDURE IF EXISTS sp_updateHorario;
+delimiter **
+CREATE PROCEDURE sp_updateHorario(in xsemana varchar(10), in xhorario json)
+begin
+	update HORARIO set horario = xhorario WHERE semana = xsemana;
+end; **
+delimiter ;
+call sp_updateHorario('2022-2', '{"horario": [[[{"num_empleado": "1", "name_empleado": "Empleado Cespedes Guerrero"}, {"num_empleado": "123", "name_empleado": "prueba Paterno Materno"}], [], [], [], [], []], [[], [], [], [], [], []], [[], [], [], [], [], []], [[], [], [], [], [], []], [[], [], [], [], [], []], [[], [], [], [], [], []], [[], [], [], [], [], []]]}');

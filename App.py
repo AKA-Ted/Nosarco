@@ -1,8 +1,11 @@
 from multiprocessing import connection
 from typing import final
+from unicodedata import name
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import pymysql
 import os
+import datetime
+import json
 
 app = Flask(__name__)
 
@@ -281,13 +284,99 @@ def Horario():
     empleados = cursor.fetchall()
     connection.close()
 
-    return render_template('horario.html', user = session, empleados = empleados)
+    year, week_num, day_of_week = datetime.date.today().isocalendar()
+    fecha =  str(year) + "-" + str(week_num)
+
+    connection = getConnection()
+    cursor = connection.cursor() 
+    cursor.execute(F"SELECT horario FROM HORARIO WHERE semana = \"{fecha}\";") 
+    horario = json.loads(cursor.fetchall()[0][0]) 
+    connection.close()
+
+    return render_template('horario.html', user = session, empleados = empleados, horario = horario)
 
 
 @app.route('/agregarHorario' , methods = ['POST', 'GET'])
 def agregarHorario():
+    if request.method == "POST":
+        day = int(request.form['day'])
+        time = int(request.form['time'])
+        num_empleado = request.form['id_empleado'].split(',')
+        name_empleado = request.form['name_empleado'].split(',')
     
-    return redirect(url_for('Horario'))
+        entries = []
+
+        for num, name in zip(num_empleado, name_empleado):
+            entry = {
+                "num_empleado" : num,
+                "name_empleado" : name
+            }
+            entries.append(entry)
+
+        year, week_num, day_of_week = datetime.date.today().isocalendar()
+        fecha =  str(year) + "-" + str(week_num)
+
+        connection = getConnection()
+        cursor = connection.cursor() 
+        cursor.execute(F"CALL sp_horario(\"{fecha}\");") 
+        connection.commit()
+        connection.close()
+
+        connection = getConnection()
+        cursor = connection.cursor() 
+        cursor.execute(F"SELECT horario FROM HORARIO WHERE semana = \"{fecha}\";") 
+        horario = json.loads(cursor.fetchall()[0][0]) 
+        connection.close()
+
+        for entry in entries:
+            horario['horario'][day][time].append(entry)
+
+        connection = getConnection()
+        cursor = connection.cursor() 
+        cursor.execute(F"CALL sp_updateHorario(\"{fecha}\", \'{json.dumps(horario)}\');") 
+        connection.commit()
+        connection.close()
+
+        return redirect(url_for('Horario'))
+
+
+@app.route('/borrarHorario' , methods = ['POST', 'GET'])
+def borrarHorario():
+    if request.method == "POST":
+        day = int(request.form['day'])
+        time = int(request.form['time'])
+        num_empleado = request.form['id_empleado'].split(',')
+        name_empleado = request.form['name_empleado'].split(',')
+    
+        entries = []
+
+        for num, name in zip(num_empleado, name_empleado):
+            entry = {
+                "num_empleado" : num,
+                "name_empleado" : name
+            }
+            entries.append(entry)
+
+        year, week_num, day_of_week = datetime.date.today().isocalendar()
+        fecha =  str(year) + "-" + str(week_num)
+
+
+        connection = getConnection()
+        cursor = connection.cursor() 
+        cursor.execute(F"SELECT horario FROM HORARIO WHERE semana = \"{fecha}\";") 
+        horario = json.loads(cursor.fetchall()[0][0]) 
+        connection.close()
+
+        for entry in entries:
+            horario['horario'][day][time].append(entry)
+
+        connection = getConnection()
+        cursor = connection.cursor() 
+        cursor.execute(F"CALL sp_updateHorario(\"{fecha}\", \'{json.dumps(horario)}\');") 
+        connection.commit()
+        connection.close()
+
+        return redirect(url_for('Horario'))
 
 #MODO DEBUG ACTIVADO
 if __name__ == "__main__":

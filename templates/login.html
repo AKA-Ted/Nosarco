@@ -11,41 +11,58 @@
 </head>
 <body>
 
-    <div class="contenedor">
+    <div class="padre">
+        
+    
+        <div class="conten">
+            <img class="nosarco" src="{{url_for('static', filename='img/nosarco.jpg')}}" alt="">
+        </div>
 
-        <h1>Inicia sesión</h1>
-        <form action="" method="POST" class="formulario">
+        <div class="contenedor">
 
-            <div class="form-group">
-                
-                <input type="text" class="form-control" name="num_empleado" id="correo" autocomplete="off">
-                <label for="num_empleado">Número de empleado</label>
+            <h1>Inicia sesión</h1>
+            <form action="" method="POST" class="formulario">
 
-            </div>
+                <div class="form-group">
+                    
+                    <input type="text" class="form-control" name="num_empleado" id="correo" autocomplete="off">
+                    <label for="num_empleado">Número de empleado</label>
 
-            <div class="form-group">
-                
-                <input type="password" class="form-control password" name="password" id="password" autocomplete="off">
-                <label for="password">Contraseña</label>
-                <i class="btn-pass fas fa-eye-slash"></i>
-
-            </div>
-
-            {%with messages = get_flashed_messages()%}
-                {%if messages%}
-                <div class="alert alert-danger" role="alert">
-                    <strong class="text-center">{{messages[0]}}</strong>
                 </div>
-                {%endif%}
-            {%endwith%}
 
-            <button class="btn btn-color" type="submit">Inicia sesión</button>
+                <div class="form-group">
+                    
+                    <input type="password" class="form-control password" name="password" id="password" autocomplete="off">
+                    <label for="password">Contraseña</label>
+                    <i class="btn-pass fas fa-eye-slash"></i>
+
+                </div>
+
+                {%with messages = get_flashed_messages()%}
+                    {%if messages%}
+                    <div class="alert alert-danger" role="alert">
+                        <strong class="text-center">{{messages[0]}}</strong>
+                    </div>
+                    {%endif%}
+                {%endwith%}
+
+                <button class="btn btn-color" type="submit">Inicia sesión</button>
 
 
-        </form>
+            </form>
 
+        </div>
     </div>
 
+    <script>
+        $(document).on('click', '.toggle-password', function() {
+    
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        
+        var input = $("#pass_log_id");
+        input.attr('type') === 'password' ? input.attr('type','text') : input.attr('type','password')
+        });
+    </script>
     <script src="{{url_for('static', filename='js/app.js')}}"></script>
 </body>
 </html>
